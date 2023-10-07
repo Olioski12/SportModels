@@ -4,9 +4,11 @@ library(dplyr)
 ##set up 
 voters <- 2
 
+
+
 team_size <- 23
 
-rounds <- 22
+rounds <- 23
 
 votes <- c(5,4,3,2,1)
 
@@ -20,11 +22,12 @@ for (t in 1:team_size){
 ##vote giving procedure
 game_rank <- data.frame()
 for (r in 1:rounds){
+  print(r)
   game_rank <- data.frame()
   
   ##performance rankings
   for (t in 1:team_size){
-    s = runif(1) + count$skill[t]
+    s = runif(1)*0.5 + count$skill[t]
     row <- data.frame(n = t, score = s)
     game_rank <- rbind(game_rank,row)
   }
@@ -51,7 +54,4 @@ for (r in 1:rounds){
 
 count <- count[order(-count$votes),]
 
-count
-
-
-##random inputs
+count[1:10,]
