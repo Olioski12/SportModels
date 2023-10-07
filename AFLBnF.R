@@ -2,18 +2,18 @@ library(fitzRoy)
 library(dplyr)
 
 ##set up 
-voters <- 3
+voters <- 1
 
 team_size <- 23
 
 rounds <- 22
 
-votes <- 3
+votes <- c(3,2,1)
 
 
 count <- data.frame()
 for (t in 1:team_size){
-  row <- data.frame(n = t, votes = 0)
+  row <- data.frame(n = t, votes = 0, skill = t/(4*team_size))
   count <- rbind(count,row)
 }
 
@@ -24,7 +24,7 @@ for (r in 1:rounds){
   
   ##performance rankings
   for (t in 1:team_size){
-    s = runif(1)
+    s = runif(1) + count$skill[t]
     row <- data.frame(n = t, score = s)
     game_rank <- rbind(game_rank,row)
   }
@@ -33,10 +33,19 @@ for (r in 1:rounds){
   
   ##votes
   for (v in 1:voters){
-    
+    c = 1
+    for (n in votes){
+      number = game_rank$n[c]
+      count$votes[which(count$n==number)] = count$votes[which(count$n==number)]+n
+      c = c+1
+      
+    }
   }
 }
 
+count <- count[order(-count$votes),]
+
+count
 
 
 ##random inputs
