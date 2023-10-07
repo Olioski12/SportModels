@@ -2,13 +2,13 @@ library(fitzRoy)
 library(dplyr)
 
 ##set up 
-voters <- 1
+voters <- 2
 
 team_size <- 23
 
 rounds <- 22
 
-votes <- c(3,2,1)
+votes <- c(5,4,3,2,1)
 
 
 count <- data.frame()
@@ -33,9 +33,15 @@ for (r in 1:rounds){
   
   ##votes
   for (v in 1:voters){
+    vgr <- game_rank
+    for(i in 1:team_size){
+      voter_amend <- runif(1)*0.25
+      vgr$score[i] <- vgr$score[i] + voter_amend
+    }
+    vgr <- vgr[order(-vgr$score),]
     c = 1
     for (n in votes){
-      number = game_rank$n[c]
+      number = vgr$n[c]
       count$votes[which(count$n==number)] = count$votes[which(count$n==number)]+n
       c = c+1
       
