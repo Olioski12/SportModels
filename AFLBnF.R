@@ -22,7 +22,6 @@ for (t in 1:team_size){
 ##vote giving procedure
 game_rank <- data.frame()
 for (r in 1:rounds){
-  print(r)
   game_rank <- data.frame()
   
   ##performance rankings

@@ -1,5 +1,8 @@
 library(fitzRoy)
 library(dplyr)
+library(here)
+
+source(here::here('VoteFunctions.R'))
 
 # stats <- fetch_player_stats_afl(season="2023")
 # stats <- stats %>% filter(round.roundNumber<=24)
