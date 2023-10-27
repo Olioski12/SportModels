@@ -29,3 +29,5 @@ Wladder <- makeLadder(ALW)
 ALM <- table %>% filter(comp == "A-League Men")
 
 Mladder <- makeLadder(ALM)
+
+MladderAve <- makeLadderAve(ALM)

@@ -47,3 +47,11 @@ makeLadder <- function(matches){
   rownames(ladder) <- 1:nrow(ladder)
   return(ladder)
 }
+
+makeLadderAve <- function(matches){
+  ladder <- makeLadder(matches)
+  ladder <- ladder %>% mutate(PTSAVE = (as.numeric(ladder$PTS)/as.numeric(ladder$P)))
+  ladder <- ladder[order(ladder$PTSAVE,decreasing=TRUE),]
+  rownames(ladder) <- 1:nrow(ladder)
+  return(ladder)
+}
