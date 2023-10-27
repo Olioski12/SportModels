@@ -18,7 +18,6 @@ match_ids <- unique(balls$match_id)
 ####Generation####
 
 ball_scores <- data.frame(ball=1:300) #Change to rows??
-innings <- length(ball_scores)
 print(length(match_ids))
 for (i in 1:length(match_ids)){
   print(i)
@@ -65,6 +64,8 @@ ball_scores_saved <- ball_scores
 bsr <- floor(ball_scores)
 
 ##############Runs/Ball###########
+inns <- length(ball_scores)
+
 sums <- c(0,0,0,0,0,0)
 for(i in 1:300){
   modb <- i %% 6
@@ -80,7 +81,7 @@ for(i in 1:300){
   sums[modb] <- sums[modb] + rowsum-prevsum
 }
 
-perball <- sums/innings/50
+perball <- sums/inns/50
 
 ###########Runs/Over###########
 sums <- 1:50
@@ -94,12 +95,12 @@ for(i in 1:50){
   sums[i] <- rowsum-prevsum
 }
 
-perover <- sums/innings
+perover <- sums/inns
 
 ########Plot#######
 ##thinning all out
 bsp <- ball_scores
-for(j in 1:innings){
+for(j in 1:inns){
   print(j)
   i=10
   while (i <= 300){
@@ -114,6 +115,6 @@ for(j in 1:innings){
 }
 
 
-matplot(ball_scores[,1],ball_scores[,2:innings],type = "l")
-matplot(bsp[,1],bsp[,2:innings],type = "l")
+#matplot(ball_scores[,1],ball_scores[,2:innings],type = "l")
+matplot(bsp[,1],bsp[,2:inns],type = "l")
 grid()
