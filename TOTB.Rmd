@@ -1,0 +1,112 @@
+---
+title: "TOTB"
+output: html_document
+date: "2024-01-08"
+---
+
+```{r setup, include=FALSE}
+library(dplyr)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+
+hitprob = 0.1
+
+#what is the value of a run? - 2 runs is great generally - derive from the back
+#model with ability, setness, and aggression
+Batability = seq(1,0,-0.1)
+Faced <- 0*Batability
+
+Bowlability = seq(1,0,-0.1)
+Bowled <- 0*Bowlability
+
+Outcomes = c(0,1,2,3,4,6)
+
+overs <- 20
+
+score <- 0;
+
+Bat1 <- 1
+Bat2 <- 2
+Bowl <- 1
+Strike <- 1
+Outs <- 0
+OnStrike <- c()
+Runs <- c()
+Bowler <- c()
+OutProbs <- c()
+
+for(i in 1:(overs*6)){
+  if(Strike==1){
+    OS <- Bat1
+  }else{
+    OS <- Bat2
+  }
+  OnStrike <- c(OnStrike,OS)
+  Faced[OS] = Faced[OS] + 1
+  Bowler <- c(Bowler,Bowl)
+  outprob <- OP(Bowlability[Bowl],Batability[OS],Faced[OS],exp(i/20))
+  OutProbs <- c(OutProbs,outprob)
+  
+  #Wicket 
+  if(runif(1)<outprob){
+    Outs <- Outs + 1
+    Runs <- c(Runs,"W")
+    if(Strike==1){
+      Bat1 <- Outs+2
+    }else{
+      Bat2 <- Outs+2
+    }
+  }else{   #No wicket
+    #Calculating runs scored - currently incremental, need to make into spinning wheel selection
+    rating <- 1
+    for(j in 1:(length(Outcomes)-1)){
+      if(runif(1)>0.5){
+        rating <- rating + Batability[OS]
+      }
+    }
+    outcome = Outcomes[floor(rating)]
+    if(outcome%%2 == 1){
+      Strike = 3-Strike
+    }
+    
+    Runs <- c(Runs,outcome)
+    score <- score + outcome
+  }
+  if(i%%6 == 0){
+    Strike = 3-Strike
+    Bowled[Bowl] <- Bowled[Bowl] +1
+    curBowl <- Bowl
+    for(b in 1:length(Bowled)){
+      if(b != curBowl && Bowled[b]<4){
+        Bowl <- b
+        break
+      }
+    }
+  }
+  if(Outs == 10){
+    break
+  }
+  
+}
+
+innings <- data.frame(OnStrike,Runs,Bowler,OutProbs)
+print(score)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
